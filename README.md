@@ -104,8 +104,9 @@ Kicks off a new analysis job asynchronously.
 Request Body: multipart/form-data with a file (PDF) and optional query (string).
 
 Success Response: 202 Accepted with a job_id.
-
+```bash
 { "message": "Analysis has been started.", "job_id": "unique-id-string" }
+```
 
 
 GET /results/{job_id}
@@ -114,9 +115,10 @@ Checks the status and retrieves the result of an analysis job.
 Path Parameter: The job_id from the /analyze response.
 
 Success Response: 200 OK with the job status and the final analysis once completed.
-
+```bash
 { "job_id": "unique-id-string", "status": "completed", "result": "The full text of the financial analysis..." }
 
+```
 ### 🐞 The Debugging Journey: From Bug to Feature
 
 ### This section details the methodical process of identifying and resolving the application's issues.
