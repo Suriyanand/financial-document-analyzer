@@ -25,3 +25,125 @@ The application follows an asynchronous worker model. The user interacts with a 
      |
      '--(6. Check Status w/ Job ID)--> [FastAPI Server] --(3. Dispatches Background Task)--> [CrewAI Worker] --> [AI Agents] --(4. Analyze Document)--> [AI Agents] --(5. Stores Result)--> [SQLite DB]
 
+
+---
+
+## 🚀 Getting Started & Setup Instructions
+
+Follow these steps to set up and run the project on a Windows machine.
+
+### 1. Prerequisites
+- [Git](https://git-scm.com/downloads)  
+- [Python 3.10+](https://www.python.org/downloads/)  
+- [Ollama](https://ollama.com)  
+
+### 2. Clone the Repository
+```bash
+git clone [https://github.com/YourUsername/financial-document-analyzer.git](https://github.com/YourUsername/financial-document-analyzer.git)
+cd financial-document-analyzer
+
+(Remember to replace YourUsername with your actual GitHub username.)
+
+```
+3. Set Up Dependencies
+
+Local LLM (Ollama): Once Ollama is installed, pull the Llama 3 model:
+
+ollama pull llama3
+
+
+Python Environment: Create and activate a virtual environment using Command Prompt (CMD):
+
+python -m venv .venv
+.venv\Scripts\activate
+
+
+Install Python Packages:
+
+pip install -r requirements.txt
+
+
+System-Level Dependencies:
+
+NLTK Data: Run the helper script to download the 'punkt' data package:
+
+python download_nltk.py
+
+
+Poppler Utility: Download the Poppler binary from this link and extract it to C:\poppler. The application is hardcoded to find it there.
+
+4. Run the Application
+
+Start Ollama: In a separate terminal, ensure the Ollama model is running:
+
+ollama run llama3
+
+
+Start the FastAPI Server: In your original Command Prompt (with .venv activated), run:
+
+python main.py
+
+
+The server will be live at http://127.0.0.1:8000
+.
+
+📄 API Documentation
+
+For full interactive documentation, run the application and visit http://127.0.0.1:8000/docs
+.
+
+POST /analyze
+Kicks off a new analysis job asynchronously.
+
+Request Body: multipart/form-data with a file (PDF) and optional query (string).
+
+Success Response: 202 Accepted with a job_id.
+
+{ "message": "Analysis has been started.", "job_id": "unique-id-string" }
+
+
+GET /results/{job_id}
+Checks the status and retrieves the result of an analysis job.
+
+Path Parameter: The job_id from the /analyze response.
+
+Success Response: 200 OK with the job status and the final analysis once completed.
+
+{ "job_id": "unique-id-string", "status": "completed", "result": "The full text of the financial analysis..." }
+
+🐞 The Debugging Journey: From Bug to Feature
+
+This section details the methodical process of identifying and resolving the application's issues.
+
+Phase 1: Core Application Logic
+
+Bug: Missing LLM Initialization
+Symptom: Application crashed on startup with a NameError for the 'llm' variable.
+Diagnosis: The AI agents were declared without an underlying language model.
+Solution: Implemented a local LLM using Ollama to provide intelligence to the agents.
+
+Bug: Incorrect Tool Definition
+Symptom: The agent failed with a KeyError: 'tools' during validation.
+Diagnosis: A custom tool was passed as a class method, not a valid Tool object.
+Solution: Refactored the tool using the @tool decorator from crewai_tools to ensure proper parsing by the agent framework.
+
+Phase 2: Environment & Dependency Management
+
+Bug: Widespread Dependency Conflicts ("Dependency Hell")
+Symptom: The application failed to install or crashed on startup with various errors (ResolutionImpossible, AttributeError, ImportError).
+Diagnosis: Multiple library conflicts were identified: crewai vs. python-dotenv, chromadb vs. NumPy 2.0, and unstructured vs. pdfminer.six.
+Solution: Systematically resolved each conflict by pinning specific, stable versions of the problematic libraries (e.g., numpy==1.26.4, pdfminer.six==20221105) in requirements.txt.
+
+Phase 3: LLM Integration & Optimization
+
+Bug: Ineffective Tool Usage by LLM
+Symptom: The llama2 agent understood what to do but failed to format its tool-use commands correctly, causing an infinite loop.
+Diagnosis: The chosen LLM lacked sufficient "function calling" capabilities for reliable agentic work.
+Solution: Upgraded the model to Llama 3, which has superior instruction-following and formatting abilities, completely resolving the reliability issue.
+
+Phase 4: System-Level Configuration
+
+Bug: Missing System Dependencies
+Symptom: The PDF reader tool failed with Resource not found and Is poppler installed and in PATH? errors.
+Diagnosis: The environment was missing the NLTK 'punkt' data package and the Poppler system binary.
+Solution: Created a script to download the NLTK package and manually installed Poppler, adding its path to the system environment to ensure the application could find it.
