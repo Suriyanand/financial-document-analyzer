@@ -92,7 +92,7 @@ python main.py
 The server will be live at http://127.0.0.1:8000
 .
 
-###📄 API Documentation
+### 📄 API Documentation
 
 For full interactive documentation, run the application and visit http://127.0.0.1:8000/docs
 .
@@ -152,3 +152,16 @@ Bug: Missing System Dependencies
 Symptom: The PDF reader tool failed with Resource not found and Is poppler installed and in PATH? errors.
 Diagnosis: The environment was missing the NLTK 'punkt' data package and the Poppler system binary.
 Solution: Created a script to download the NLTK package and manually installed Poppler, adding its path to the system environment to ensure the application could find it.
+
+### 📂 Project Structure
+├── .venv/              # Virtual environment files (ignored by Git)
+├── data/               # Sample PDF documents
+├── .gitignore          # Specifies files for Git to ignore
+├── README.md           # This file
+├── agents.py           # Defines the CrewAI agents (Analyst, Advisor)
+├── database.py         # Handles SQLite database setup and operations
+├── main.py             # FastAPI application, API endpoints, and background tasks
+├── requirements.txt    # List of Python dependencies
+├── task.py             # Defines the tasks for the CrewAI agents
+└── tools.py            # Custom tools for the agents (e.g., PDF reader)
+
