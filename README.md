@@ -45,49 +45,54 @@ cd financial-document-analyzer
 (Remember to replace YourUsername with your actual GitHub username.)
 
 ```
-3. Set Up Dependencies
+### 3. Set Up Dependencies
+```bash
 
 Local LLM (Ollama): Once Ollama is installed, pull the Llama 3 model:
 
 ollama pull llama3
-
+```
 
 Python Environment: Create and activate a virtual environment using Command Prompt (CMD):
-
+```bash
 python -m venv .venv
 .venv\Scripts\activate
+```
 
-
-Install Python Packages:
-
+###Install Python Packages:
+```bash
 pip install -r requirements.txt
-
+```
 
 System-Level Dependencies:
 
 NLTK Data: Run the helper script to download the 'punkt' data package:
 
+```bash
 python download_nltk.py
+```
 
 
 Poppler Utility: Download the Poppler binary from this link and extract it to C:\poppler. The application is hardcoded to find it there.
 
-4. Run the Application
+### 4. Run the Application
 
 Start Ollama: In a separate terminal, ensure the Ollama model is running:
-
+```bash
 ollama run llama3
-
+```
 
 Start the FastAPI Server: In your original Command Prompt (with .venv activated), run:
+```bash
 
 python main.py
+```
 
 
 The server will be live at http://127.0.0.1:8000
 .
 
-📄 API Documentation
+###📄 API Documentation
 
 For full interactive documentation, run the application and visit http://127.0.0.1:8000/docs
 .
@@ -111,11 +116,11 @@ Success Response: 200 OK with the job status and the final analysis once complet
 
 { "job_id": "unique-id-string", "status": "completed", "result": "The full text of the financial analysis..." }
 
-🐞 The Debugging Journey: From Bug to Feature
+### 🐞 The Debugging Journey: From Bug to Feature
 
-This section details the methodical process of identifying and resolving the application's issues.
+### This section details the methodical process of identifying and resolving the application's issues.
 
-Phase 1: Core Application Logic
+ ### Phase 1: Core Application Logic
 
 Bug: Missing LLM Initialization
 Symptom: Application crashed on startup with a NameError for the 'llm' variable.
@@ -127,21 +132,21 @@ Symptom: The agent failed with a KeyError: 'tools' during validation.
 Diagnosis: A custom tool was passed as a class method, not a valid Tool object.
 Solution: Refactored the tool using the @tool decorator from crewai_tools to ensure proper parsing by the agent framework.
 
-Phase 2: Environment & Dependency Management
+### Phase 2: Environment & Dependency Management
 
 Bug: Widespread Dependency Conflicts ("Dependency Hell")
 Symptom: The application failed to install or crashed on startup with various errors (ResolutionImpossible, AttributeError, ImportError).
 Diagnosis: Multiple library conflicts were identified: crewai vs. python-dotenv, chromadb vs. NumPy 2.0, and unstructured vs. pdfminer.six.
 Solution: Systematically resolved each conflict by pinning specific, stable versions of the problematic libraries (e.g., numpy==1.26.4, pdfminer.six==20221105) in requirements.txt.
 
-Phase 3: LLM Integration & Optimization
+### Phase 3: LLM Integration & Optimization
 
 Bug: Ineffective Tool Usage by LLM
 Symptom: The llama2 agent understood what to do but failed to format its tool-use commands correctly, causing an infinite loop.
 Diagnosis: The chosen LLM lacked sufficient "function calling" capabilities for reliable agentic work.
 Solution: Upgraded the model to Llama 3, which has superior instruction-following and formatting abilities, completely resolving the reliability issue.
 
-Phase 4: System-Level Configuration
+### Phase 4: System-Level Configuration
 
 Bug: Missing System Dependencies
 Symptom: The PDF reader tool failed with Resource not found and Is poppler installed and in PATH? errors.
