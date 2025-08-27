@@ -1,4 +1,4 @@
-![Project Banner](https://link-to-your-banner-image.png)
+
 
 
 # 🚀 Financial Document Analyzer – A Debugging & Refactoring Journey
