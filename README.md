@@ -22,6 +22,6 @@ This repository documents the end-to-end process of taking a deliberately broken
 The application follows an asynchronous worker model. The user interacts with a FastAPI server, which offloads the heavy AI processing to a background task and stores the result in a database.
 
 [User] --(1. Upload PDF)--> [FastAPI Server] --(2. Returns Job ID Instantly)--> [User]
-    | 
+    |
     '--(6. Check Status w/ Job ID)--> [FastAPI Server] --(3. Dispatches Background Task)--> [CrewAI Worker] --> [AI Agents] --(4. Analyze Document)--> [AI Agents] --(5. Stores Result)--> [SQLite DB]'
 
