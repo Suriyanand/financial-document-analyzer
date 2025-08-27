@@ -20,10 +20,11 @@ This repository documents the end-to-end process of taking a deliberately broken
 ## 🏛️ System Architecture
 
 The application follows an asynchronous worker model. The user interacts with a FastAPI server, which offloads the heavy AI processing to a background task and stores the result in a database.
-
+```bash
 [User] --(1. Upload PDF)--> [FastAPI Server] --(2. Returns Job ID Instantly)--> [User]
      |
      '--(6. Check Status w/ Job ID)--> [FastAPI Server] --(3. Dispatches Background Task)--> [CrewAI Worker] --> [AI Agents] --(4. Analyze Document)--> [AI Agents] --(5. Stores Result)--> [SQLite DB]
+```
 
 
 ---
@@ -154,6 +155,7 @@ Diagnosis: The environment was missing the NLTK 'punkt' data package and the Pop
 Solution: Created a script to download the NLTK package and manually installed Poppler, adding its path to the system environment to ensure the application could find it.
 
 ### 📂 Project Structure
+```bash
 ├── .venv/              # Virtual environment files (ignored by Git)
 ├── data/               # Sample PDF documents
 ├── .gitignore          # Specifies files for Git to ignore
@@ -164,4 +166,6 @@ Solution: Created a script to download the NLTK package and manually installed P
 ├── requirements.txt    # List of Python dependencies
 ├── task.py             # Defines the tasks for the CrewAI agents
 └── tools.py            # Custom tools for the agents (e.g., PDF reader)
+
+```
 
